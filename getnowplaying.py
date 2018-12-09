@@ -3,11 +3,17 @@ import csv
 import os
 import os.path
 import shlex
+import argparse
+
+opt_parser = argparse.ArgumentParser()
+opt_parser.add_argument("--tagged_folder", "-f",
+                        action="store", nargs="?", type=str,)
+args = opt_parser.parse_args()
 
 MYRIAD_CLIENT_IPS = ["192.168.0.2", "192.168.0.7"]
 TCP_PORT = 6950
 MYRIAD_SERVER_IP = "192.168.0.4"
-MYRIAD_TAGGED_DIR = "\\\\" + MYRIAD_SERVER_IP + \
+MYRIAD_TAGGED_DIR = args.tagged_folder if args.tagged_folder else "\\\\" + MYRIAD_SERVER_IP + \
     "\\PSquared\\AudioWall\\0000s\\Tagged"
 COMMAND = "PLAYER TAGPLAYINGAUDIO ALL\n"
 
