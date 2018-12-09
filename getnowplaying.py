@@ -10,6 +10,7 @@ opt_parser.add_argument("--tagged_folder", "-f",
                         action="store", nargs="?", type=str,)
 args = opt_parser.parse_args()
 
+# TODO: Can we interrogate the RB-OA3 to determine which studio is on air?
 MYRIAD_CLIENT_IPS = ["192.168.0.2", "192.168.0.7"]
 TCP_PORT = 6950
 MYRIAD_SERVER_IP = "192.168.0.4"
@@ -76,6 +77,9 @@ with open(latest_file_path, "r") as tagged_csv:
             item_data_parts = item_data_unit.split("=")
             item_data[item_data_parts[0]] = item_data_parts[1]
 
+            # TODO: Look at SecondsPlayed - if it's more than (say) 6 minutes out, it's probably stuck.
+            # So, then exit(3)
+
         if item_data["ContTypInf"] == "Music":
             now_playing_is_song = True
             now_playing_artist = item_data["AName1"]
@@ -86,4 +90,4 @@ if now_playing_is_song:
 else:
     exit(2)
 
-# os.remove(latest_file_path)
+os.remove(latest_file_path)
