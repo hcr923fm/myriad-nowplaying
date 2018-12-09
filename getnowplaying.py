@@ -26,10 +26,10 @@ def getDataUntilNewLine(s):
     return data
 
 
-#print "Attempting to tag all playing audio"
+# print "Attempting to tag all playing audio"
 
 for server in MYRIAD_CLIENT_IPS:
-    #print "--->", server
+    # print "--->", server
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     s.connect((server, TCP_PORT))
     success = False
@@ -40,13 +40,13 @@ for server in MYRIAD_CLIENT_IPS:
 
         if data.find("Success") != -1:
             success = True
-            #print "--->    Success"
+            # print "--->    Success"
             s.close()
         elif data.find("Connected") != -1:
-            #print "--->    Connected"
+            # print "--->    Connected"
             pass
         else:
-            #print "--->    Failed, retrying"
+            # print "--->    Failed, retrying"
             failcount += 1
 
     if not success:
@@ -58,7 +58,6 @@ files = sorted(files)
 
 latest_file_name = files.pop()
 latest_file_path = os.path.join(MYRIAD_TAGGED_DIR, latest_file_name)
-
 now_playing_is_song = False
 now_playing_title = ""
 now_playing_artist = ""
@@ -66,11 +65,11 @@ now_playing_artist = ""
 with open(latest_file_path, "r") as tagged_csv:
     csv_reader = csv.DictReader(tagged_csv, fieldnames=["StartDateTime", "HDReference", "Player", "SecondsPlayed",
                                                         "LogReference", "OnAirReference", "ScheduleReference", "Location", "CurrentUser", "HDSerialisation"])
-    for i in range(0, 5):
-        # The first 5 rows are comments in this file
-        csv_reader.next()
+
     for row in csv_reader:
         item_data_string = row["HDSerialisation"]
+        if (not item_data_string) or (row["HDSerialisation"] == "HDSerialisation"):
+            continue
         item_data_split = shlex.split(item_data_string)
         item_data = {}
         for item_data_unit in item_data_split:
@@ -87,4 +86,4 @@ if now_playing_is_song:
 else:
     exit(2)
 
-os.remove(latest_file_path)
+# os.remove(latest_file_path)
