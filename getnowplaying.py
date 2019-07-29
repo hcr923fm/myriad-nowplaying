@@ -60,6 +60,7 @@ files = sorted(files)
 latest_file_name = files.pop()
 latest_file_path = os.path.join(MYRIAD_TAGGED_DIR, latest_file_name)
 now_playing_is_song = False
+now_playing_is_show = False
 now_playing_title = ""
 now_playing_artist = ""
 
@@ -84,10 +85,16 @@ with open(latest_file_path, "r") as tagged_csv:
             now_playing_is_song = True
             now_playing_artist = item_data["AName1"]
             now_playing_title = item_data["ITitle"]
+        if item_data["ContTypInf"] == "Show":
+            now_playing_is_show = True
+            now_playing_artist = item_data["AName1"]
+            now_playing_title = item_data["ITitle"]
+
+os.remove(latest_file_path)
 
 if now_playing_is_song:
     print now_playing_artist, "-", now_playing_title
+elif now_playing_is_show:
+    now_playing_title, "with", now_playing_artist
 else:
     exit(2)
-
-os.remove(latest_file_path)
